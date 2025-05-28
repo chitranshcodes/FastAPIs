@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 import requests
 from fastapi.templating import Jinja2Templates
@@ -20,3 +20,10 @@ def weather(c:str):
         return JSONResponse(content={'error':'not found'},status_code=response.status_code)
     return JSONResponse(content=response.json())
 
+@app.get("/weather-ui/city/{c}")
+def weatherui(request:Request,c:str):
+    url=f"https://api.weatherapi.com/v1/current.json?key={API_KEY}&q={c}"
+    response=requests.get(url)
+    if response.status_code==200:
+        return templates.TemplateResponse("weather.html",{"request":request,'data':response.json(),'city':c})
+    return templates.TemplateResponse("weather.html",{"request":request,'data':None,'city':c})
