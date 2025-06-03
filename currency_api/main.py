@@ -9,7 +9,7 @@ API_KEY=os.getenv("api_key")
 
 app=FastAPI()
 
-@app.get("/currency/pair/{initial}/{target}")
+@app.get("/currency/latest-rates/{initial}/{target}")
 def currency_conversion(initial:str,target:str):
     url=f'https://api.freecurrencyapi.com/v1/latest?apikey={API_KEY}&base_currency={initial.upper()}&currencies={target.upper()}'
     response=requests.get(url)
